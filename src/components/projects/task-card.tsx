@@ -24,6 +24,7 @@ export function TaskCard({
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
+          style={provided.draggableProps.style as React.CSSProperties}
           className={cn(
             "rounded-xl border border-border bg-surface p-3 sm:p-3.5 mb-2.5 shadow-soft",
             "transition-all duration-150 cursor-grab active:cursor-grabbing select-none touch-none",
