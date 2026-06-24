@@ -1,0 +1,128 @@
+@import "@fontsource/space-grotesk/500.css";
+@import "@fontsource/space-grotesk/600.css";
+@import "@fontsource/space-grotesk/700.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/jetbrains-mono/500.css";
+@import "@fontsource/jetbrains-mono/600.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 248 250 252;
+  --surface: 255 255 255;
+  --surface-2: 241 245 249;
+  --border: 226 232 240;
+  --fg: 15 23 42;
+  --muted: 100 116 139;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+.dark {
+  --bg: 15 23 42;
+  --surface: 17 24 39;
+  --surface-2: 30 41 59;
+  --border: 31 41 55;
+  --fg: 248 250 252;
+  --muted: 148 163 184;
+}
+
+* { border-color: rgb(var(--border)); box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+
+body {
+  background-color: rgb(var(--bg));
+  color: rgb(var(--fg));
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100dvh;
+}
+
+/* Prevent horizontal overflow on mobile */
+html, body { overflow-x: hidden; max-width: 100vw; }
+
+::selection { background: rgba(59,130,246,0.25); }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgb(var(--border)); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: rgb(var(--muted)); }
+
+@layer utilities {
+  .glass {
+    @apply bg-white/70 dark:bg-surface/70 backdrop-blur-xl border border-border/80;
+  }
+  .glass-card {
+    @apply glass rounded-2xl shadow-glass;
+  }
+  .text-gradient {
+    background: linear-gradient(135deg,#3B82F6,#8B5CF6 60%,#06B6D4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .font-display { font-family: var(--font-display); }
+  .font-mono-data { font-family: var(--font-mono); }
+  .skeleton {
+    @apply relative overflow-hidden bg-surface2 rounded-xl;
+    background-image: linear-gradient(
+      90deg,
+      rgba(148,163,184,0.06) 0px,
+      rgba(148,163,184,0.2) 80px,
+      rgba(148,163,184,0.06) 160px
+    );
+    background-size: 700px 100%;
+    animation: shimmer 1.6s linear infinite;
+  }
+  .focus-ring {
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+  /* Safe area insets for notched phones */
+  .safe-top { padding-top: env(safe-area-inset-top); }
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -700px 0; }
+  100% { background-position: 700px 0; }
+}
+@keyframes fade-in { from { opacity:0; } to { opacity:1; } }
+@keyframes slide-up { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+@keyframes pulse-dot { 0%,100% { opacity:1; } 50% { opacity:.4; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *,*::before,*::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}
+
+/* ── Chart container fixes ── */
+/* Ensure recharts SVGs are never clipped */
+.recharts-wrapper,
+.recharts-surface {
+  overflow: visible !important;
+}
+
+/* ── Mobile responsive improvements ── */
+@media (max-width: 640px) {
+  /* Tighter padding on mobile cards */
+  .glass-card {
+    padding: 14px !important;
+  }
+  /* Slightly smaller chart heights on tiny screens */
+  .recharts-wrapper {
+    min-height: 240px;
+  }
+  /* Prevent pie chart legend overflow on mobile */
+  .recharts-legend-wrapper {
+    font-size: 11px !important;
+  }
+}
